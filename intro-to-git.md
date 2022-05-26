@@ -1,24 +1,24 @@
 ---
+title: Intro to Git
 layout: default
 nav_order: 3
 ---
-# Intro to Git
 
-- [Intro to Git](#intro-to-git)
-  - [What is a Git Repository?](#what-is-a-git-repository)
-  - [Configuring Git](#configuring-git)
-  - [Getting a Git Repository](#getting-a-git-repository)
-  - [Creating a Basic Git Repo](#creating-a-basic-git-repo)
-  - [Best Practices](#best-practices)
-  - [Adding, Staging, Committing](#adding-staging-committing)
-  - [Working With Remote Repositories](#working-with-remote-repositories)
-  - [Cloning a Repo](#cloning-a-repo)
-  - [Pushing to a Remote](#pushing-to-a-remote)
-  - [Pulling from a Remote](#pulling-from-a-remote)
-  - [Linking a Local Repo to a Remote](#linking-a-local-repo-to-a-remote)
-  - [Branches](#branches)
-  - [Merge Conflicts](#merge-conflicts)
-  - [Further Links](#further-links)
+- [What is a Git Repository?](#what-is-a-git-repository)
+- [Configuring Git](#configuring-git)
+- [Creating a Repo](#creating-a-repo)
+- [Best Practices](#best-practices)
+- [Adding, Staging, Committing](#adding-staging-committing)
+  - [File States in Git](#file-states-in-git)
+- [Local vs. Remote Repositories](#local-vs-remote-repositories)
+- [Collaboration](#collaboration)
+  - [Forking](#forking)
+  - [Invitations and Pull Requests](#invitations-and-pull-requests)
+- [Cloning a Repo](#cloning-a-repo)
+- [Pushing to a Remote](#pushing-to-a-remote)
+- [Pulling from a Remote](#pulling-from-a-remote)
+- [Linking a Local Repo to a Remote](#linking-a-local-repo-to-a-remote)
+- [Further Links](#further-links)
 
 ***
 
@@ -26,7 +26,7 @@ nav_order: 3
 
 A repository tracks all changes made to files in a project by saving snapshots of the project's history.
 
-It is represented by the `.git` folder in the filesystem, and is also known as a **repo** for short.
+It is represented by the hidden `.git` folder in the filesystem, and is also known as a **repo** for short.
 
 ***
 
@@ -40,28 +40,14 @@ Git uses this to identify who you are.
 # set your name
 git config --global user.name "your_name"
 
-# set your email-address
+# set your email address
 git config --global user.email "your_email"
 
 # makes command line output colorful (increases readability)
 git config --global color.ui auto
 ```
 
-## Getting a Git Repository
-
-Method 1: Creating a repo from an existing directory
-
-```text
-git init
-```
-
-Method 2: Copying a repo from another source (see [Remotes](#linking-a-local-repo-to-a-remote))
-
-```text
-git clone
-```
-
-## Creating a Basic Git Repo
+## Creating a Repo
 
 ```bash
 # create an empty directory named git-workshop
@@ -117,7 +103,7 @@ git status
 
 What about adding multiple files?
 
-```bash
+```text
 # of course, you can do it the painful way
 git add file1
 git add folder\file2
@@ -127,9 +113,9 @@ git add folder\file2
 # there is however an easier way!
 
 # the dot tells Git to add *everything* in the directory 
+# *everything* includes files in subfolders too
 git add .
 
-# *everything* includes files in subfolders too
 ```
 
 Once you're done adding files, it's time to make a commit.
@@ -140,7 +126,7 @@ Following the previous analogy, you are sealing and sending the package.
 
 ```bash
 # the -m flag allows you to add a message to your commit 
-git commit -m "added README"
+git commit -m "Add README"
 
 # how does the repo look like now?
 git status
@@ -149,9 +135,21 @@ git status
 git log
 ```
 
+### File States in Git
+
+![File States in Git](assets/images/file-states.png)
+
+`untracked` - the file exists, but isn't tracked by Git yet.
+
+`unmodified` - the file has not changed since the last commit.
+
+`modified` - the file has content added/deleted/changed since the last commit.
+
+`staged` - the file starts to be tracked and is ready to be included in the next commit.
+
 ***
 
-## Working With Remote Repositories
+## Local vs. Remote Repositories
 
 So far, we have only been working on our local machine.
 These are local repos.
@@ -161,18 +159,42 @@ Or if we wanted to host our repo online to let others collaborate?
 
 We do that by utilising remote repos.
 
+Remote repos are hosted on websites such as [GitHub](https://github.com/) or [GitLab](https://about.gitlab.com/)
+
+The THD has it's [own GitLab instance](https://mygit.th-deg.de/) where you can host your own projects on THD servers. You just need your student account credentials to log in.
+
+## Collaboration
+
+GitHub and GitLab offer fine-grained permissions for users to control who can contribute to their remote repositories.
+
+As a rule, making a copy of the repository is allowed, but you cannot modify the repository's contents directly.
+
+In order to modify a repository's contents, you need to either:
+
+1. `Fork` it.
+2. Get invited to collaborate.
+3. Create a pull request.
+
+### Forking
+
+By forking a repository, you are making your own copy of the repository to do with as you please. This copy will be linked to the original. When the original repository has updates, you have the option to integrate them in your forked repo as well.
+
+### Invitations and Pull Requests
+
+You can request the repo owner to add you as a trusted collaborator, but this is rarely done in practice for bigger projects. Instead, you will be asked to do a pull request instead. We will not be covering this in detail, however.
+
 ## Cloning a Repo
 
-By cloning a repo, you are essentially copying a repo from an external source.
+By cloning a repo, you are copying a repo from an external source.
 A directory created with all the files from the project after cloning.
 
 What are external sources?
-These are repos hosted on the web through platforms such as GitHub or Gitlab.
+These are repos hosted on the web through platforms such as GitHub or GitLab.
 
-The two main ways to clone a repo are with either HTTP or SSH.
-These methods are essentially the same for our purposes. We will be using HTTP.
+The two main ways to clone a repo are with either HTTPS or SSH.
+These methods are essentially the same for our purposes. We will be using HTTPS.
 
-To get the URL, click on the green `CODE` button on a GitHub repo (`CLONE` on Gitlab).
+To get the URL, click on the green `CODE` button on a GitHub repo (`CLONE` on GitLab).
 
 Copy the URL shown under the HTTPS tab.
 
@@ -221,46 +243,6 @@ git remote add origin [url]
 git push --set-upstream origin main
 ```
 
-## Branches
-
-A branch is a copy of the current repo with its own commit history.
-It is mostly used to code new features or fix bugs without affecting the original code.
-
-```bash
-# list all available branches
-git branch
-
-# create a branch with name "test"
-git branch test
-
-# switch to test branch
-git checkout test
-
-# delete test branch
-git branch -d test
-
-# create and switch to test branch
-git checkout -b test
-```
-
-## Merge Conflicts
-
-Merge conflicts occur when Git cannot automatically resolve the changes made to the repo.
-
-These typically occur when:
-1\. 2 branches are merged.
-2\. The remote repo differs largely from the local repo.
-
-When this happens, we need to go into the files and fix the conflict manually.
-
-```bash
-# try to merge test branch with current branch
-git merge test
-
-# which files have a merge conflict?
-git status
-```
-
 ## Further Links
 
 [Pro Git](https://git-scm.com/book/en/v2) - A book that goes in-depth on everything Git has to offer.
@@ -268,3 +250,5 @@ git status
 [Oh Shit, Git!?!](https://ohshitgit.com/) - For times when you screw up and don't know what to do.
 
 [GitHub's .gitignore Templates](https://github.com/github/gitignore) - .gitignore templates from Github.
+
+[Writing Good Commit Messages](https://cbea.ms/git-commit/) - an art in of itself.
